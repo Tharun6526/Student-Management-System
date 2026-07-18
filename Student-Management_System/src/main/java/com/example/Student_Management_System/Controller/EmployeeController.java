@@ -1,6 +1,7 @@
 package com.example.Student_Management_System.Controller;
 
 import com.example.Student_Management_System.DTO.*;
+import com.example.Student_Management_System.Model.Employee;
 import com.example.Student_Management_System.Model.Student;
 import com.example.Student_Management_System.Service.EmployeeService;
 import jakarta.validation.Valid;
@@ -53,6 +54,17 @@ public class EmployeeController {
         List<Student> students = service.getStudents();
         return ResponseEntity.ok(students);
     }
+    @PutMapping("/{id}/update")
+    public ResponseEntity<Employee> UpdateDetails(@PathVariable Long id,@RequestBody EmployeeUpdate emp){
+         Employee e = service.updateEmp(id,emp);
+         return ResponseEntity.ok(e);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployeeDetails(@PathVariable Long id){
+         Employee x = service.getEmp(id);
+         return ResponseEntity.ok(x);
+    }
+
 
 
 

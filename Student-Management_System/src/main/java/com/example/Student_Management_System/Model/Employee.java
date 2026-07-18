@@ -16,5 +16,6 @@ public class Employee {
     private String Eemail;
     @Pattern(regexp = "\\d{10}")
     private String phone;
-
+    @NotBlank
+    private  String address;
 }

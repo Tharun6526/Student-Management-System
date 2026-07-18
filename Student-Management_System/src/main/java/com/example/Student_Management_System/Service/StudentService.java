@@ -1,6 +1,7 @@
 package com.example.Student_Management_System.Service;
 
 import com.example.Student_Management_System.DTO.StudentUpdate;
+import com.example.Student_Management_System.Exception.StudentNotFoundException;
 import com.example.Student_Management_System.Model.Student;
 import com.example.Student_Management_System.Repository.StudentRepo;
 
@@ -14,14 +15,13 @@ public class StudentService {
     }
     public Student getProfile( Long sId) {
 
-         return studentRepo.findById(sId).orElseThrow(() -> new RuntimeException("Student not Found"));
+         return studentRepo.findById(sId).orElseThrow(() -> new StudentNotFoundException("Student not Found"));
     }
 
     public Student updateDetails(Long id,StudentUpdate s) {
 
         Student m  = studentRepo.findById(id)
-                                        .orElseThrow(() -> new RuntimeException("Student not Found"));
-        m.setName(s.getName());
+                                        .orElseThrow(() -> new StudentNotFoundException("Student not Found"));
         m.setAddress(s.getAddress());
         m.setEmail(s.getEmail());
         m.setPhone(s.getPhone());
