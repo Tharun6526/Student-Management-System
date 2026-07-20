@@ -44,5 +44,5 @@ public class Student {
     private int attendance;
 
     @NotBlank(message = "Semester cannot be empty")
-    private String sem;
+    private String semester;
 }

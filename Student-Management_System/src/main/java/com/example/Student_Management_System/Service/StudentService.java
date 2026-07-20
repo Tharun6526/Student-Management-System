@@ -1,5 +1,6 @@
 package com.example.Student_Management_System.Service;
 
+import com.example.Student_Management_System.DTO.AdminStudentUpdate;
 import com.example.Student_Management_System.DTO.StudentUpdate;
 import com.example.Student_Management_System.Exception.StudentNotFoundException;
 import com.example.Student_Management_System.Model.Student;
@@ -55,5 +56,11 @@ public class StudentService {
     public void DeleteStudent(Long id) {
         Student x =  studentRepo.findById(id).orElseThrow(()->new StudentNotFoundException("Student Not Found"));
         studentRepo.deleteById(id);
+    }
+    public Student updateStudentProfile(Long id, AdminStudentUpdate s){
+        Student temp = studentRepo.findById(id).orElseThrow(()->new StudentNotFoundException("Student not Found"));
+        Student x = new Student();
+        BeanUtils.copyProperties(x,temp);
+        return x;
     }
 }

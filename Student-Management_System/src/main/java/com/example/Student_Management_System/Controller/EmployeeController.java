@@ -38,11 +38,7 @@ public class EmployeeController {
     public ResponseEntity<Student> updateAttendance(@PathVariable Long id, @RequestBody StudentAttendanceUpdate s){
          return ResponseEntity.ok(service.updateAttendance(id,s));
     }
-    @PutMapping("/student/{id}/department")
-    public ResponseEntity<Student> updateDepartment(@PathVariable Long id, @Valid@RequestBody StudentDepartmentUpdate s){
-         Student x= service.updateDepartment(id,s);
-         return ResponseEntity.ok(x);
-    }
+
     @DeleteMapping("/students/{id}")
     public ResponseEntity<Student> DeleteStudent( @PathVariable Long id){
 

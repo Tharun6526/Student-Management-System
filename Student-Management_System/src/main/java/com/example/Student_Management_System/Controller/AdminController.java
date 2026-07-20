@@ -1,4 +1,5 @@
 package com.example.Student_Management_System.Controller;
+import com.example.Student_Management_System.DTO.AdminStudentUpdate;
 import com.example.Student_Management_System.Model.Student;
 import com.example.Student_Management_System.Service.EmployeeService;
 import com.example.Student_Management_System.Service.StudentService;
@@ -20,6 +21,8 @@ public class AdminController {
         this.studentService = studentService;
         this.employeeService = employeeService;
     }
+
+    //Student Methods
     @PostMapping("/students/add")
     public ResponseEntity<Student> addStudent(@Valid @RequestBody Student s){
         Student x = studentService.addStudent(s);
@@ -41,9 +44,14 @@ public class AdminController {
         return new ResponseEntity<>(x,HttpStatus.OK);
     }
     @DeleteMapping("/students/{id}")
-    public ResponseEntity<Student> update(@PathVariable Long id){
+    public ResponseEntity<Student> deleteStudent(@PathVariable Long id){
         studentService.DeleteStudent(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+    @PutMapping("/students/{id}/department")
+    public ResponseEntity<Student> updateStudentProfile(@PathVariable Long id, @Valid @RequestBody AdminStudentUpdate s){
+        Student x = studentService.updateStudentProfile(id,s);
+        return  new ResponseEntity<>(x,HttpStatus.ACCEPTED);
     }
 
 }

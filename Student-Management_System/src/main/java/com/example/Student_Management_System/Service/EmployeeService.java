@@ -2,7 +2,6 @@ package com.example.Student_Management_System.Service;
 
 import com.example.Student_Management_System.DTO.EmployeeUpdate;
 import com.example.Student_Management_System.DTO.StudentAttendanceUpdate;
-import com.example.Student_Management_System.DTO.StudentDepartmentUpdate;
 import com.example.Student_Management_System.DTO.StudentMarksUpdate;
 import com.example.Student_Management_System.Exception.EmployeeNotFoundException;
 import com.example.Student_Management_System.Exception.StudentNotFoundException;
@@ -45,12 +44,6 @@ public class EmployeeService {
         return srepo.save(m);
     }
 
-    public Student updateDepartment(Long id, StudentDepartmentUpdate s) {
-        Student m = srepo.findById(id).orElseThrow(()-> new StudentNotFoundException("Id not Found"));
-        m.setDepartment(s.getDepartment());
-        m.setSem(s.getSem());
-        return srepo.save(m);
-    }
 
     public Student deleteStudent(Long id) {
         Student m = srepo.findById(id).orElseThrow(()->new StudentNotFoundException("Id not Found"));
