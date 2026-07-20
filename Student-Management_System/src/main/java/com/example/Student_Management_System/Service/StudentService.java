@@ -5,7 +5,11 @@ import com.example.Student_Management_System.Exception.StudentNotFoundException;
 import com.example.Student_Management_System.Model.Student;
 import com.example.Student_Management_System.Repository.StudentRepo;
 
+import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class StudentService {
@@ -28,5 +32,28 @@ public class StudentService {
       return  studentRepo.save(m);
 
 
+    }
+//ADmin Methods
+    public Student addStudent(@Valid Student s) {
+        Student x = new Student();
+        BeanUtils.copyProperties(s,x);
+        return studentRepo.save(x);
+    }
+
+
+    public List<Student> getAllStudents() {
+        return studentRepo.findAll();
+    }
+
+    public Student updateStudent(Long id,Student s) {
+        Student x = studentRepo.findById(id).orElseThrow(()-> new StudentNotFoundException("Student not Found"));
+        Student m = new Student();
+        BeanUtils.copyProperties(s,m);
+        return m;
+    }
+
+    public void DeleteStudent(Long id) {
+        Student x =  studentRepo.findById(id).orElseThrow(()->new StudentNotFoundException("Student Not Found"));
+        studentRepo.deleteById(id);
     }
 }
