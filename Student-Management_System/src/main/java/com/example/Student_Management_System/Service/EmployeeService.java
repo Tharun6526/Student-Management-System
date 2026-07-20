@@ -1,5 +1,6 @@
 package com.example.Student_Management_System.Service;
 
+import com.example.Student_Management_System.DTO.AdminEmployeeUpdate;
 import com.example.Student_Management_System.DTO.EmployeeUpdate;
 import com.example.Student_Management_System.DTO.StudentAttendanceUpdate;
 import com.example.Student_Management_System.DTO.StudentMarksUpdate;
@@ -65,5 +66,39 @@ public class EmployeeService {
     public Employee getEmp(Long id){
         Employee x =  repo.findById(id).orElseThrow(()-> new EmployeeNotFoundException("Employee id Not Found"));
         return x;
+    }
+
+    //Admin Methods
+    public Employee add(Employee e){
+        return repo.save(e);
+    }
+
+    public void deleteEmp(Long id) {
+        Employee e = repo.findById(id).orElseThrow(()->new EmployeeNotFoundException("Employee Not Found"));
+         repo.deleteById(id);
+    }
+
+    public Employee AdminUpdateEmp(Long id, AdminEmployeeUpdate e) {
+        Employee m = repo.findById(id).orElseThrow(()->new EmployeeNotFoundException("Employee Not Found"));
+        if (e.getEname() != null) {
+            m.setEname(e.getEname());
+        }
+
+        if (e.getEemail() != null) {
+            m.setEemail(e.getEemail());
+        }
+
+        if (e.getPhone() != null) {
+            m.setPhone(e.getPhone());
+        }
+
+        if (e.getAddress() != null) {
+            m.setAddress(e.getAddress());
+        }
+
+        if (e.getDepartment() != null) {
+            m.setDepartment(e.getDepartment());
+        }
+        return  repo.save(m);
     }
 }
