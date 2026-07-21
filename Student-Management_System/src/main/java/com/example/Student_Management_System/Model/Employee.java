@@ -1,4 +1,5 @@
     package com.example.Student_Management_System.Model;
+    import com.fasterxml.jackson.annotation.JsonIgnore;
     import jakarta.persistence.*;
     import jakarta.validation.constraints.Email;
     import jakarta.validation.constraints.NotBlank;
@@ -26,7 +27,7 @@
         @ManyToOne
         @JoinColumn(name = "department_id")
         private Department department;
-
+        @JsonIgnore
         @OneToMany(mappedBy ="employee")
         private List<Course> course = new ArrayList<>();
     }

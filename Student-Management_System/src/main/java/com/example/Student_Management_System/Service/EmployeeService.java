@@ -4,6 +4,7 @@ import com.example.Student_Management_System.DTO.AdminDTOs.AdminEmployeeUpdate;
 import com.example.Student_Management_System.DTO.EmployeeDTOs.EmployeeUpdate;
 import com.example.Student_Management_System.DTO.EmployeeDTOs.EmployeeStudentAttendanceUpdate;
 import com.example.Student_Management_System.DTO.EmployeeDTOs.EmployeeStudentMarksUpdate;
+import com.example.Student_Management_System.Exception.EmployeeDeletionNotAllowedException;
 import com.example.Student_Management_System.Exception.EmployeeNotFoundException;
 import com.example.Student_Management_System.Exception.StudentNotFoundException;
 import com.example.Student_Management_System.Model.Course;
@@ -78,8 +79,16 @@ public class EmployeeService {
     }
 
     public void deleteEmp(Long id) {
-        Employee e = repo.findById(id).orElseThrow(()->new EmployeeNotFoundException("Employee Not Found"));
-         repo.deleteById(id);
+        Employee emp = repo.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+
+        if (!emp.getCourse().isEmpty()) {
+            throw new EmployeeDeletionNotAllowedException(
+                    "Cannot delete employee because they are assigned to courses."
+            );
+        }
+
+        repo.delete(emp);
     }
 
     public Employee AdminUpdateEmp(Long id, AdminEmployeeUpdate e) {

@@ -1,5 +1,6 @@
 package com.example.Student_Management_System.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
@@ -47,6 +48,7 @@ private Department department;
     private int marks;
     private int attendance;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "student")
     private List<Enrollment> enrollments = new ArrayList<>();
 }

@@ -36,8 +36,7 @@ public class EnrollmentService {
         Course c = crepo.findById(dto.getCourseId()).orElseThrow(()-> new CourseNotFound("Course Not Found"));
         Optional<Enrollment> existing = enrolRepo.findByStudentIdAndCourseId(dto.getStudentId(),dto.getCourseId());
         if(existing.isPresent()){
-            throw new RuntimeException("Student is already Present");
-        }
+            throw new RuntimeException("Student is already enrolled in this course.");        }
         Enrollment e = new Enrollment();
         e.setStudent(s);
         e.setCourse(c);
@@ -48,21 +47,24 @@ public class EnrollmentService {
 
 
     public List<Enrollment> getStudentEnrols(Long id) {
-        List<Enrollment> r = enrolRepo.findByStudentId(id);
-        if(r.isEmpty()){
-            throw  new RuntimeException("Student not Found");
-        }
-        return r;
+        Student student = srepo.findById(id)
+                .orElseThrow(() ->
+                        new StudentNotFoundException("Student Not Found"));
+
+        return enrolRepo.findByStudentId(student.getId());
     }
 
-    public List<Course> getCourseEnrols(Long id) {
-        List<Enrollment> enrols = enrolRepo.findByStudentId(id);
-        if(enrols.isEmpty()){
-            throw new StudentNotFoundException("Student Not Found");
-        }
-        return enrols.stream().map(Enrollment::getCourse).toList();
-    }
+    public List<Course> getCourseEnrols(Long studentId) {
 
+        Student student = srepo.findById(studentId)
+                .orElseThrow(() ->
+                        new StudentNotFoundException("Student Not Found"));
+
+        return enrolRepo.findByStudentId(student.getId())
+                .stream()
+                .map(Enrollment::getCourse)
+                .toList();
+    }
     public void deleteEnrollment(Long id){
         Enrollment r =  enrolRepo.findById(id).orElseThrow(()->new RuntimeException("Could not found Enrollment"));
         enrolRepo.deleteById(id);

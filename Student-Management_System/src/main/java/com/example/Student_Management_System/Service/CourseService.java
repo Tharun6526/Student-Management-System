@@ -2,9 +2,12 @@ package com.example.Student_Management_System.Service;
 
 import com.example.Student_Management_System.DTO.AdminDTOs.CourseCreateDTO;
 import com.example.Student_Management_System.DTO.AdminDTOs.CourseUpdateDTO;
+import com.example.Student_Management_System.Exception.CourseNotFound;
 import com.example.Student_Management_System.Model.Course;
+import com.example.Student_Management_System.Model.Department;
 import com.example.Student_Management_System.Model.Employee;
 import com.example.Student_Management_System.Repository.CourseRepository;
+import com.example.Student_Management_System.Repository.DepartmentRepository;
 import com.example.Student_Management_System.Repository.EmployeeRepo;
 import com.example.Student_Management_System.Repository.EnrollementRepository;
 import org.springframework.stereotype.Service;
@@ -15,16 +18,26 @@ import java.util.List;
 public class CourseService {
     private final CourseRepository courseRepository;
     private  final EmployeeRepo erepo;
-    public CourseService(CourseRepository courseRepository,EmployeeRepo erepo){
+    private final DepartmentRepository drepo;
+    public CourseService(CourseRepository courseRepository,EmployeeRepo erepo,DepartmentRepository drepo){
         this.courseRepository =courseRepository;
         this.erepo  =erepo;
+        this.drepo =drepo;
     }
     public Course add(CourseCreateDTO dto){
+
+        Employee employee = erepo.findById(dto.getEmployeeId())
+                .orElseThrow(() -> new RuntimeException("Employee Not Found"));
+
+        Department department = drepo.findById(dto.getDepartmentId())
+                .orElseThrow(() -> new RuntimeException("Department Not Found"));
         Course s =  new Course();
         s.setCourseCode(dto.getCourseCode());
         s.setCourseName(dto.getCourseName());
         s.setCredits(dto.getCredits());
         s.setSemester(dto.getSemester());
+        s.setEmployee(employee);
+        s.setDepartment(department);
         return courseRepository.save(s);
     }
 
@@ -46,10 +59,18 @@ public class CourseService {
         return courseRepository.save(x);
     }
 
-    public String deleteCourse(Long id) {
-        Course s = courseRepository.findById(id).orElseThrow(()-> new RuntimeException("Course Not Found"));
-        courseRepository.delete(s);
-        return "Course Deleted Successfully";
+    public void deleteCourse(Long id) {
+
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new CourseNotFound("Course Not Found"));
+
+        if (!course.getEnrollments().isEmpty()) {
+            throw new RuntimeException(
+                    "Cannot delete course because students are enrolled in it."
+            );
+        }
+
+        courseRepository.delete(course);
     }
     public List<Course> getCourses(){
         return courseRepository.findAll();

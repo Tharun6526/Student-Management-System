@@ -6,6 +6,7 @@ import com.example.Student_Management_System.DTO.AdminDTOs.CourseUpdateDTO;
 import com.example.Student_Management_System.DTO.DepartmentDTOs.DepartmentDTO;
 import com.example.Student_Management_System.DTO.EnrollementDTOs.EnrollmentCreateDTO;
 import com.example.Student_Management_System.DTO.EnrollementDTOs.EnrollmentPatchDTO;
+import com.example.Student_Management_System.DTO.StudentDTOs.StudentCreateDTO;
 import com.example.Student_Management_System.Model.*;
 import com.example.Student_Management_System.Service.*;
 import jakarta.validation.Valid;
@@ -37,7 +38,7 @@ public class AdminController {
 
     //Student Methods
     @PostMapping("/students")
-    public ResponseEntity<Student> addStudent(@Valid @RequestBody Student s){
+    public ResponseEntity<Student> addStudent(@Valid @RequestBody StudentCreateDTO s){
         Student x = studentService.addStudent(s);
             return new  ResponseEntity<>(x,HttpStatus.CREATED);
     }
@@ -119,8 +120,11 @@ public class AdminController {
             return new ResponseEntity<>(courseService.updateCourse(id,c),HttpStatus.OK);
     }
     @DeleteMapping("/courses/{id}")
-    public ResponseEntity<String> deleteCourse(@PathVariable Long id){
-        return ResponseEntity.ok(courseService.deleteCourse(id));
+    public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
+
+        courseService.deleteCourse(id);
+
+        return ResponseEntity.noContent().build();
     }
     @GetMapping("/courses")
     public ResponseEntity<List<Course>>  getCourses(){

@@ -10,7 +10,6 @@ public class AdminStudentUpdate {
 
     private String address;
 
-    private String department;
-
-    private int semester;
+    private Long departmentId;
+    private Integer semester;
     }

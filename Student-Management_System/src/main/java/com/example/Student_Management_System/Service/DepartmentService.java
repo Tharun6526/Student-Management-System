@@ -41,8 +41,10 @@ public class DepartmentService {
     }
 
     public void deleteDepartment(Long id) {
-        drepo.deleteById(id);
-        
+        Department department = drepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Department Id Not Found"));
+
+        drepo.delete(department);
     }
 
     public List<Student> getDepartmentStudents(Long id) {

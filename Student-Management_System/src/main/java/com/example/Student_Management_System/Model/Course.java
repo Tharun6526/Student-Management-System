@@ -1,5 +1,6 @@
 package com.example.Student_Management_System.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.type.descriptor.java.SerializableJavaType;
@@ -23,6 +24,7 @@ public class Course {
 
     private Integer semester;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "course")
     private List<Enrollment> enrollments =  new ArrayList<>();
 
