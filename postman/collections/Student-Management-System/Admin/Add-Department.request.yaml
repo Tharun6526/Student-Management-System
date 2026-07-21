@@ -1,0 +1,14 @@
+$kind: http-request
+name: Add Department
+method: POST
+url: '{{baseUrl}}/admin/departments'
+order: 26000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Computer Science"
+    }

@@ -1,0 +1,8 @@
+$kind: http-request
+name: Get Employee Courses
+method: GET
+url: '{{baseUrl}}/admin/employees/:id/courses'
+order: 14000
+pathVariables:
+  - key: id
+    value: '101'

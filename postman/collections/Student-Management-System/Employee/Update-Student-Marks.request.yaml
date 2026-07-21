@@ -1,0 +1,17 @@
+$kind: http-request
+name: Update Student Marks
+method: PATCH
+url: '{{baseUrl}}/employees/students/:id/marks'
+order: 3000
+pathVariables:
+  - key: id
+    value: '1'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "marks": 85
+    }

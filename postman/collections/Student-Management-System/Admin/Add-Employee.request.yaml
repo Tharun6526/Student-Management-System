@@ -1,0 +1,18 @@
+$kind: http-request
+name: Add Employee
+method: POST
+url: '{{baseUrl}}/admin/employees'
+order: 9000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "Eid": 101,
+      "Ename": "Prof. Smith",
+      "Eemail": "smith@example.com",
+      "phone": "9876543211",
+      "address": "789 Faculty Ave"
+    }

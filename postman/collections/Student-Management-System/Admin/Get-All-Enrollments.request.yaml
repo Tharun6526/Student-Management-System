@@ -1,0 +1,5 @@
+$kind: http-request
+name: Get All Enrollments
+method: GET
+url: '{{baseUrl}}/admin/enrollments'
+order: 21000

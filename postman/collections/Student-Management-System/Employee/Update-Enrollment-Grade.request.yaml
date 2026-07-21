@@ -1,0 +1,17 @@
+$kind: http-request
+name: Update Enrollment Grade
+method: PATCH
+url: '{{baseUrl}}/employees/enrollments/:id/grade'
+order: 11000
+pathVariables:
+  - key: id
+    value: '1'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "grade": "A"
+    }

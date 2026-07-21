@@ -1,0 +1,8 @@
+$kind: http-request
+name: Get Department Employees
+method: GET
+url: '{{baseUrl}}/admin/departments/:id/employees'
+order: 32000
+pathVariables:
+  - key: id
+    value: '1'

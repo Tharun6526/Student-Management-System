@@ -1,0 +1,17 @@
+$kind: http-request
+name: Add Course
+method: POST
+url: '{{baseUrl}}/admin/courses'
+order: 15000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "courseName": "Mathematics",
+      "semester": 1,
+      "employeeId": 101,
+      "departmentId": 1
+    }

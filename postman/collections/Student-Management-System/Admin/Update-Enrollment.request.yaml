@@ -1,0 +1,17 @@
+$kind: http-request
+name: Update Enrollment
+method: PATCH
+url: '{{baseUrl}}/admin/enrollments/:id'
+order: 23000
+pathVariables:
+  - key: id
+    value: '1'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "status": "ACTIVE"
+    }

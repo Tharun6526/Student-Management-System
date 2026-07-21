@@ -1,0 +1,20 @@
+$kind: http-request
+name: Update Profile
+method: PUT
+url: '{{baseUrl}}/students/profile/:id'
+order: 2000
+pathVariables:
+  - key: id
+    value: '1'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Student Updated",
+      "address": "New Address",
+      "email": "student@example.com",
+      "phone": "9876543213"
+    }

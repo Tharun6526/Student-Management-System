@@ -1,0 +1,8 @@
+$kind: http-request
+name: Delete Enrollment
+method: DELETE
+url: '{{baseUrl}}/admin/enrollments/:id'
+order: 24000
+pathVariables:
+  - key: id
+    value: '1'

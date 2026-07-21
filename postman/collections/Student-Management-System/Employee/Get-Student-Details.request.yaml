@@ -1,0 +1,8 @@
+$kind: http-request
+name: Get Student Details
+method: GET
+url: '{{baseUrl}}/employees/students/:id'
+order: 1000
+pathVariables:
+  - key: id
+    value: '1'

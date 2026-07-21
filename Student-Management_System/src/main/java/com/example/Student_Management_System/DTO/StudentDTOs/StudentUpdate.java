@@ -1,4 +1,4 @@
-package com.example.Student_Management_System.DTO;
+package com.example.Student_Management_System.DTO.StudentDTOs;
 import lombok.Data;
 @Data
 public class StudentUpdate {

@@ -1,13 +1,16 @@
 package com.example.Student_Management_System.Service;
 
-import com.example.Student_Management_System.DTO.AdminEmployeeUpdate;
-import com.example.Student_Management_System.DTO.EmployeeUpdate;
-import com.example.Student_Management_System.DTO.StudentAttendanceUpdate;
-import com.example.Student_Management_System.DTO.StudentMarksUpdate;
+import com.example.Student_Management_System.DTO.AdminDTOs.AdminEmployeeUpdate;
+import com.example.Student_Management_System.DTO.EmployeeDTOs.EmployeeUpdate;
+import com.example.Student_Management_System.DTO.EmployeeDTOs.EmployeeStudentAttendanceUpdate;
+import com.example.Student_Management_System.DTO.EmployeeDTOs.EmployeeStudentMarksUpdate;
 import com.example.Student_Management_System.Exception.EmployeeNotFoundException;
 import com.example.Student_Management_System.Exception.StudentNotFoundException;
+import com.example.Student_Management_System.Model.Course;
+import com.example.Student_Management_System.Model.Department;
 import com.example.Student_Management_System.Model.Employee;
 import com.example.Student_Management_System.Model.Student;
+import com.example.Student_Management_System.Repository.DepartmentRepository;
 import com.example.Student_Management_System.Repository.EmployeeRepo;
 import com.example.Student_Management_System.Repository.StudentRepo;
 import jakarta.validation.Valid;
@@ -19,10 +22,11 @@ import java.util.List;
 public class EmployeeService {
     private  final EmployeeRepo repo;
     private  final StudentRepo srepo;
-
-    public EmployeeService(EmployeeRepo employeeRepo,StudentRepo studentRepo){
+    private  final DepartmentRepository departmentRepository;
+    public EmployeeService(EmployeeRepo employeeRepo,StudentRepo studentRepo,DepartmentRepository deptRepo){
         this.repo =employeeRepo;
         this.srepo = studentRepo;
+        this.departmentRepository= deptRepo;
     }
 
     //for getting student details
@@ -34,12 +38,12 @@ public class EmployeeService {
        return srepo.save(s);
     }
 
-    public Student updateMarks(Long id, @Valid StudentMarksUpdate s) {
+    public Student updateMarks(Long id, @Valid EmployeeStudentMarksUpdate s) {
         Student  m = srepo.findById(id).orElseThrow(() -> new StudentNotFoundException("Id not found"));
         m.setMarks(s.getMarks());
        return  srepo.save(m);
     }
-    public Student updateAttendance(Long id, StudentAttendanceUpdate s){
+    public Student updateAttendance(Long id, EmployeeStudentAttendanceUpdate s){
         Student m = srepo.findById(id).orElseThrow(()->new StudentNotFoundException("Id not Found"));
         m.setAttendance(s.getAttendance());
         return srepo.save(m);
@@ -80,6 +84,7 @@ public class EmployeeService {
 
     public Employee AdminUpdateEmp(Long id, AdminEmployeeUpdate e) {
         Employee m = repo.findById(id).orElseThrow(()->new EmployeeNotFoundException("Employee Not Found"));
+        Department d =  new Department();
         if (e.getEname() != null) {
             m.setEname(e.getEname());
         }
@@ -96,9 +101,19 @@ public class EmployeeService {
             m.setAddress(e.getAddress());
         }
 
-        if (e.getDepartment() != null) {
-            m.setDepartment(e.getDepartment());
+        if (e.getDepartmentId() != null) {
+            Department department =  departmentRepository.findById(e.getDepartmentId()).orElseThrow(()->new RuntimeException("Department Not Found"));
+            m.setDepartment(department);
         }
         return  repo.save(m);
+    }
+
+    public List<Employee> getAllEmployees() {
+        return repo.findAll();
+    }
+
+    public List<Course> getEmpCourses(Long id) {
+        Employee m = repo.findById(id).orElseThrow(()->new EmployeeNotFoundException("Employee Not Found"));
+        return m.getCourse();
     }
 }

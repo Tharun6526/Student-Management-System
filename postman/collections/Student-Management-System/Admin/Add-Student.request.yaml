@@ -1,0 +1,20 @@
+$kind: http-request
+name: Add Student
+method: POST
+url: '{{baseUrl}}/admin/students'
+order: 1000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "John Doe",
+      "address": "123 Main St",
+      "email": "john@example.com",
+      "phone": "9876543210",
+      "semester": 1,
+      "marks": 0,
+      "attendance": 0
+    }

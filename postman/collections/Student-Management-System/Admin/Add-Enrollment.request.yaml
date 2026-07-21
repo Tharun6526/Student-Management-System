@@ -1,0 +1,15 @@
+$kind: http-request
+name: Add Enrollment
+method: POST
+url: '{{baseUrl}}/admin/enrollments'
+order: 20000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "studentId": 1,
+      "courseId": 1
+    }

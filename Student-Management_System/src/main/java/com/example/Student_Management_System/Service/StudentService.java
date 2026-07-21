@@ -1,8 +1,10 @@
 package com.example.Student_Management_System.Service;
 
-import com.example.Student_Management_System.DTO.AdminStudentUpdate;
-import com.example.Student_Management_System.DTO.StudentUpdate;
+import com.example.Student_Management_System.DTO.AdminDTOs.AdminStudentUpdate;
+import com.example.Student_Management_System.DTO.StudentDTOs.StudentUpdate;
 import com.example.Student_Management_System.Exception.StudentNotFoundException;
+import com.example.Student_Management_System.Model.Course;
+import com.example.Student_Management_System.Model.Enrollment;
 import com.example.Student_Management_System.Model.Student;
 import com.example.Student_Management_System.Repository.StudentRepo;
 
@@ -19,7 +21,6 @@ public class StudentService {
         this.studentRepo = studentRepo;
     }
     public Student getProfile( Long sId) {
-
          return studentRepo.findById(sId).orElseThrow(() -> new StudentNotFoundException("Student not Found"));
     }
 
@@ -53,7 +54,7 @@ public class StudentService {
         return m;
     }
 
-    public void DeleteStudent(Long id) {
+    public void deleteStudent(Long id) {
         Student x =  studentRepo.findById(id).orElseThrow(()->new StudentNotFoundException("Student Not Found"));
         studentRepo.deleteById(id);
     }
@@ -62,5 +63,21 @@ public class StudentService {
         Student x = new Student();
         BeanUtils.copyProperties(x,temp);
         return x;
+    }
+
+    public List<Course> getStudentCourses(Long studentId) {
+        Student student = studentRepo.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        return student.getEnrollments()
+                .stream()
+                .map(Enrollment::getCourse)
+                .toList();
+    }
+
+    public List<Enrollment> getStudentEnrollments(Long studentId) {
+        Student student = studentRepo.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        return student.getEnrollments();
     }
 }

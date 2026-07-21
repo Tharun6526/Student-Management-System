@@ -1,0 +1,17 @@
+$kind: http-request
+name: Update Student Department
+method: PUT
+url: '{{baseUrl}}/admin/students/:id/department'
+order: 6000
+pathVariables:
+  - key: id
+    value: '1'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "departmentId": 1
+    }
