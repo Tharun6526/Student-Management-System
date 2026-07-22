@@ -2,14 +2,15 @@ package com.example.Student_Management_System.Service;
 
 import com.example.Student_Management_System.DTO.AdminDTOs.CourseCreateDTO;
 import com.example.Student_Management_System.DTO.AdminDTOs.CourseUpdateDTO;
-import com.example.Student_Management_System.Exception.CourseNotFound;
+import com.example.Student_Management_System.Exception.CourseCannotBeDeletedException;
+import com.example.Student_Management_System.Exception.CourseNotFoundException;
+import com.example.Student_Management_System.Exception.EmployeeNotFoundException;
 import com.example.Student_Management_System.Model.Course;
 import com.example.Student_Management_System.Model.Department;
 import com.example.Student_Management_System.Model.Employee;
 import com.example.Student_Management_System.Repository.CourseRepository;
 import com.example.Student_Management_System.Repository.DepartmentRepository;
 import com.example.Student_Management_System.Repository.EmployeeRepo;
-import com.example.Student_Management_System.Repository.EnrollementRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,10 +63,10 @@ public class CourseService {
     public void deleteCourse(Long id) {
 
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFound("Course Not Found"));
+                .orElseThrow(() -> new CourseNotFoundException("Course Not Found"));
 
         if (!course.getEnrollments().isEmpty()) {
-            throw new RuntimeException(
+            throw new CourseCannotBeDeletedException(
                     "Cannot delete course because students are enrolled in it."
             );
         }
@@ -87,7 +88,7 @@ public class CourseService {
 
 
     public List<Course> getEmployeeCourse(Long id) {
-        Employee e =  erepo.findById(id).orElseThrow(()-> new RuntimeException("Employee Not Found"));
+        Employee e =  erepo.findById(id).orElseThrow(()-> new EmployeeNotFoundException("Employee Not Found"));
         return e.getCourse();
     }
 }

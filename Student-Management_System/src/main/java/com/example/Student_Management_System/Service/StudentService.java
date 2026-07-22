@@ -3,6 +3,7 @@ package com.example.Student_Management_System.Service;
 import com.example.Student_Management_System.DTO.AdminDTOs.AdminStudentUpdate;
 import com.example.Student_Management_System.DTO.StudentDTOs.StudentCreateDTO;
 import com.example.Student_Management_System.DTO.StudentDTOs.StudentUpdate;
+import com.example.Student_Management_System.Exception.DepartmentNotFoundException;
 import com.example.Student_Management_System.Exception.StudentNotFoundException;
 import com.example.Student_Management_System.Model.Course;
 import com.example.Student_Management_System.Model.Department;
@@ -112,7 +113,7 @@ public class StudentService {
         if (dto.getDepartmentId() != null) {
 
             Department department = departmentRepository.findById(dto.getDepartmentId())
-                    .orElseThrow(() -> new RuntimeException("Department Not Found"));
+                    .orElseThrow(() -> new DepartmentNotFoundException("Department Not Found"));
 
             student.setDepartment(department);
         }
@@ -122,7 +123,7 @@ public class StudentService {
 
     public List<Course> getStudentCourses(Long studentId) {
         Student student = studentRepo.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student not found"));
 
         return student.getEnrollments()
                 .stream()
@@ -132,7 +133,7 @@ public class StudentService {
 
     public List<Enrollment> getStudentEnrollments(Long studentId) {
         Student student = studentRepo.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student not found"));
         return student.getEnrollments();
     }
 }

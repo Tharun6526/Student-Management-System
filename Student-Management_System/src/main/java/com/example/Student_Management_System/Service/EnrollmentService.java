@@ -5,7 +5,9 @@ import com.example.Student_Management_System.DTO.EnrollementDTOs.EnrollmentPatch
 import com.example.Student_Management_System.DTO.EnrollementDTOs.EnrollmentUpdateAttendanceDTO;
 import com.example.Student_Management_System.DTO.EnrollementDTOs.EnrollmentUpdateGradeDTO;
 import com.example.Student_Management_System.ENUMs.EnrollmentStatus;
-import com.example.Student_Management_System.Exception.CourseNotFound;
+import com.example.Student_Management_System.Exception.CourseNotFoundException;
+import com.example.Student_Management_System.Exception.EmployeeNotFoundException;
+import com.example.Student_Management_System.Exception.EnrollmentNotFoundException;
 import com.example.Student_Management_System.Exception.StudentNotFoundException;
 import com.example.Student_Management_System.Model.Course;
 import com.example.Student_Management_System.Model.Enrollment;
@@ -16,7 +18,8 @@ import com.example.Student_Management_System.Repository.StudentRepo;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;import org.springframework.http.HttpStatusCode;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,7 +36,7 @@ public class EnrollmentService {
     public Enrollment add(EnrollmentCreateDTO dto)
     {
         Student s = srepo.findById(dto.getStudentId()).orElseThrow(()-> new StudentNotFoundException("Student Not Found"));
-        Course c = crepo.findById(dto.getCourseId()).orElseThrow(()-> new CourseNotFound("Course Not Found"));
+        Course c = crepo.findById(dto.getCourseId()).orElseThrow(()-> new CourseNotFoundException("Course Not Found"));
         Optional<Enrollment> existing = enrolRepo.findByStudentIdAndCourseId(dto.getStudentId(),dto.getCourseId());
         if(existing.isPresent()){
             throw new RuntimeException("Student is already enrolled in this course.");        }
@@ -66,19 +69,19 @@ public class EnrollmentService {
                 .toList();
     }
     public void deleteEnrollment(Long id){
-        Enrollment r =  enrolRepo.findById(id).orElseThrow(()->new RuntimeException("Could not found Enrollment"));
+        Enrollment r =  enrolRepo.findById(id).orElseThrow(()->new EnrollmentNotFoundException("Could not found Enrollment"));
         enrolRepo.deleteById(id);
     }
 
     public Enrollment updateAttendance(Long id, EnrollmentUpdateAttendanceDTO dto) {
-    Enrollment  e = enrolRepo.findById(id).orElseThrow(()->new RuntimeException("Enrollment Not Found"));
+    Enrollment  e = enrolRepo.findById(id).orElseThrow(()->new EnrollmentNotFoundException("Enrollment Not Found"));
         e.setAttendance(dto.getAttendance());
         enrolRepo.save(e);
         return e;
     }
 
     public Enrollment updateGrade(Long id, EnrollmentUpdateGradeDTO s) {
-        Enrollment  e = enrolRepo.findById(id).orElseThrow(()->new RuntimeException("Enrollment Not Found"));
+        Enrollment  e = enrolRepo.findById(id).orElseThrow(()->new EnrollmentNotFoundException("Enrollment Not Found"));
         e.setGrade(s.getGrade());
         enrolRepo.save(e);
         return e;
@@ -93,7 +96,7 @@ public class EnrollmentService {
     public List<Enrollment> getAdminCourseEnrols(Long id) {
 
        Course c =  crepo.findById(id)
-                .orElseThrow(() -> new CourseNotFound("Course Not Found"));
+                .orElseThrow(() -> new CourseNotFoundException("Course Not Found"));
 
         return enrolRepo.findByCourseId(c.getId());
     }
@@ -104,12 +107,12 @@ public class EnrollmentService {
 
     public Enrollment getEnrollmentById(Long id) {
         return enrolRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+                .orElseThrow(() -> new EnrollmentNotFoundException("Enrollment not found"));
     }
     public Enrollment patchEnrollment(Long id, EnrollmentPatchDTO dto) {
 
         Enrollment enrollment = enrolRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+                .orElseThrow(() -> new EnrollmentNotFoundException("Enrollment not found"));
 
         if (dto.getAttendance() != null) {
             enrollment.setAttendance(dto.getAttendance());

@@ -1,6 +1,7 @@
 package com.example.Student_Management_System.Service;
 
 import com.example.Student_Management_System.DTO.DepartmentDTOs.DepartmentDTO;
+import com.example.Student_Management_System.Exception.DepartmentNotFoundException;
 import com.example.Student_Management_System.Model.Course;
 import com.example.Student_Management_System.Model.Department;
 import com.example.Student_Management_System.Model.Employee;
@@ -42,23 +43,23 @@ public class DepartmentService {
 
     public void deleteDepartment(Long id) {
         Department department = drepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Department Id Not Found"));
+                .orElseThrow(() -> new DepartmentNotFoundException("Department Id Not Found"));
 
         drepo.delete(department);
     }
 
     public List<Student> getDepartmentStudents(Long id) {
-        Department d = drepo.findById(id).orElseThrow(()->new RuntimeException("Department Id Not Found"));
+        Department d = drepo.findById(id).orElseThrow(()->new DepartmentNotFoundException("Department Id Not Found"));
         return d.getStudents();
     }
 
     public List<Employee> getDepartmentEmployees(Long id) {
-        Department d = drepo.findById(id).orElseThrow(()->new RuntimeException("Department Id Not Found"));
+        Department d = drepo.findById(id).orElseThrow(()->new DepartmentNotFoundException("Department Id Not Found"));
         return d.getEmployees();
     }
 
     public List<Course> getDepartmentCourses(Long id) {
-        Department d = drepo.findById(id).orElseThrow(()->new RuntimeException("Department Id Not Found"));
+        Department d = drepo.findById(id).orElseThrow(()->new DepartmentNotFoundException("Department Id Not Found"));
         return d.getCourses();
     }
 }
